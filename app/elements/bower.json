@@ -1,0 +1,23 @@
+{
+  "name": "elements",
+  "homepage": "https://github.com/crodgers/ogs-player-card",
+  "authors": [
+    "crodgers <lunchbox.rodgers@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "iron-ajax": "PolymerElements/iron-ajax#^1.2.0",
+    "polymer": "Polymer/polymer#^1.4.0",
+    "x-tag-deck": "x-tag/deck#^0.2.22"
+  }
+}
