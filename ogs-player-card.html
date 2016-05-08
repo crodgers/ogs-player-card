@@ -13,6 +13,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="bower_components/paper-card/paper-card.html">
 <link rel="import" href="bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="bower_components/paper-button/paper-button.html">
+<link rel="import" href="bower_components/paper-spinner/paper-spinner.html">
 <link rel="import" href="themes/dark-side/dark-side.html">
 <link href='https://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>
 
@@ -52,6 +53,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         };
       }
 
+      paper-spinner {
+        margin-top: 25% 0% 0% 0%;
+      }
+
       #rank {
         float: right;
       }
@@ -67,6 +72,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         margin: 0% 15% 0% 0%;
       }
 
+      #win_loss_totals {
+        display: none;
+        @apply(--layout-center-center);
+      }
+
+
       #ranking {
         float: left;
         margin: 0% 0% 0% 15%;
@@ -81,12 +92,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       .card-content {
         margin: 5px 0px 0px 0px;
         padding: 0px;
-      }
-
-      .card-actions {
-        @apply(--layout-horizontal);
-        @apply(--layout-center-justified);
-
       }
     </style>
     <iron-ajax
@@ -111,7 +116,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <h1 id="rank">{{computeRank(player.ranking)}}</h1>
         </div>
         <div class="content_div" id="win_loss">
-           <h1>{{wins}} - {{losses}}</h1>
+          <paper-spinner active id="rank_spinner"></paper-spinner>
+          <h1 id="win_loss_totals">{{wins}} - {{losses}}</h1>
         </div>
         
 
@@ -182,7 +188,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       computeRank: function(rank_int) {
-        console.log("rank_int: " + rank_int);
         if (rank_int < 30) {
           return (30 - rank_int) + "k";
         }
@@ -213,6 +218,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
        if (data.detail.response.next) {
         this.page++;
+       }
+       else {
+        this.$.rank_spinner.style.display = "none";
+        this.$.win_loss_totals.style.display = "inline-block"
+
        }
       },
 
