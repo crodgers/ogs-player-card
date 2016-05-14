@@ -4,7 +4,7 @@
   "authors": [
     "crodgers <lunchbox.rodgers@gmail.com>"
   ],
-  "description": "",
+  "description": "A web component that displays basic OGS user information",
   "main": "",
   "moduleType": [],
   "license": "MIT",
