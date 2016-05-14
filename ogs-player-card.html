@@ -68,12 +68,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       #win_loss {
-        float: right;
+        @apply(--layout-center-center);
+        alignment: center;
         margin: 0% 15% 0% 0%;
       }
 
       #win_loss_totals {
-        display: none;
         @apply(--layout-center-center);
       }
 
@@ -100,24 +100,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
        handle-as="json"
        last-response="{{player}}">
     </iron-ajax>
-    <iron-ajax
-       auto
-       url="{{games_url}}"
-       params={{options}}
-       handle-as="json"
-       on-response="handleGameResponse"></iron-ajax>
     <paper-card
-      heading="{{player.username}}" 
+      heading="{{computeNameRankString(player.user.username, player.user.ranking)}}" 
       elevation="1"
-      image="{{iconURL(player.related.icon)}}"
+      image="{{iconURL(ogs_id)}}"
       animated-shadow="false">
       <div class="card-content">
-        <div class="content_div" id="ranking">
-          <h1 id="rank">{{computeRank(player.ranking)}}</h1>
-        </div>
         <div class="content_div" id="win_loss">
-          <paper-spinner active id="rank_spinner"></paper-spinner>
-          <h1 id="win_loss_totals">{{wins}} - {{losses}}</h1>
+          <h1 id="win_loss_totals">{{player.statistics.wins}} - {{player.statistics.losses}}</h1>
         </div>
         
 
@@ -176,15 +166,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       playerURL: function (id) {
-        return 'https://online-go.com/api/v1/players/' + id;
+        return 'https://online-go.com/api/v1/players/' + id + "/full/";
       },
 
       gamesURL: function(id) {
         return this.playerURL(id) + '/games/'
       },
 
-      iconURL: function(icon_url) {
-        return 'https://online-go.com/' + icon_url + "?size=128";
+      iconURL: function(id) {
+        console.log('https://online-go.com/api/v1/players/' + id + "/icon/?size=128");
+        return 'https://online-go.com/api/v1/players/' + id + "/icon/?size=128";
       },
 
       computeRank: function(rank_int) {
@@ -197,33 +188,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         
       },
 
-      handleGameResponse: function(data) {
-        // console.log(data.detail.response.results);
-        var games = data.detail.response.results
-        for (var game_index in games) {
-          if (games[game_index].white == this.ogs_id && !games[game_index].white_lost) {
-            this.wins++;
-          }
-
-          else if (games[game_index].black == this.ogs_id && !games[game_index].black_lost) {
-            this.wins++;
-         }
-
-         else {
-          this.losses++;
-         }
-
-
-        }
-
-       if (data.detail.response.next) {
-        this.page++;
-       }
-       else {
-        this.$.rank_spinner.style.display = "none";
-        this.$.win_loss_totals.style.display = "inline-block"
-
-       }
+      computeNameRankString: function(username, ranking) {
+        return username + "        " + this.computeRank(ranking);
       },
 
       computeOptions: function(page) {
